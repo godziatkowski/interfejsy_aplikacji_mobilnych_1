@@ -27,7 +27,7 @@ namespace App1
     public sealed partial class MainPage : Page
     {
         private List<Currency> latestCurrency;
-        //ObservableCollection<Currency> currencyList { get; set; 
+        ObservableCollection<Currency> currencyList { get; set; }
 
         public MainPage()
         {
@@ -38,18 +38,19 @@ namespace App1
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             loadData();
-            
-
         }
 
-        private void loadData() {
+        private async void loadData() {
+            mylistbox.Visibility = Visibility.Collapsed;
+            LoadingRing.Visibility = Visibility.Visible;
             LoadingRing.IsActive = true;
             Task<List<Currency>> downloadTask = XMLSimpleDownload.downloadLatestXML();
-
-            Task continuation = downloadTask.ContinueWith(antecedent => {
-                latestCurrency = antecedent.Result;
-                LoadingRing.IsActive = false;
-            });
+            await downloadTask;
+            currencyList = new ObservableCollection<Currency>(downloadTask.Result);
+            mylistbox.ItemsSource = currencyList;
+            LoadingRing.IsActive = false;
+            LoadingRing.Visibility = Visibility.Collapsed;
+            mylistbox.Visibility = Visibility.Visible;
         }
     }
 }
