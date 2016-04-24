@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using System.Threading;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -26,31 +27,55 @@ namespace App1
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private List<Currency> latestCurrency;
         ObservableCollection<Currency> currencyList { get; set; }
+        private Task<List<Currency>> downloadTask;
+        private CancellationTokenSource cts;
 
         public MainPage()
         {
             this.InitializeComponent();
             loadData();
+            //loadFileNamesFromCurrentYear();
         }
+
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             loadData();
         }
 
-        private async void loadData() {
-            mylistbox.Visibility = Visibility.Collapsed;
-            LoadingRing.Visibility = Visibility.Visible;
-            LoadingRing.IsActive = true;
-            Task<List<Currency>> downloadTask = XMLSimpleDownload.downloadLatestXML();
+        private async void loadData()
+        {
+            cts = new CancellationTokenSource();
+            try
+            {
+                mylistbox.Visibility = Visibility.Collapsed;
+                LoadingRing.Visibility = Visibility.Visible;
+                LoadingRing.IsActive = true;
+                downloadTask = new CurrencyXMLDownload().downloadLatestXML(cts.Token);
+                await downloadTask;
+                currencyList = new ObservableCollection<Currency>(downloadTask.Result);
+                mylistbox.ItemsSource = currencyList;
+            }
+            catch (OperationCanceledException ex)
+            {
+            }
+            finally
+            {
+                LoadingRing.IsActive = false;
+                LoadingRing.Visibility = Visibility.Collapsed;
+                mylistbox.Visibility = Visibility.Visible;
+                cts = null;
+                downloadTask = null;
+            }
+        }
+
+        private async void loadFileNamesFromCurrentYear()
+        {
+            Task<Dictionary<DateTime, String>> downloadTask = new TxtDirDownload().downloadLatestDirFile();
             await downloadTask;
-            currencyList = new ObservableCollection<Currency>(downloadTask.Result);
-            mylistbox.ItemsSource = currencyList;
-            LoadingRing.IsActive = false;
-            LoadingRing.Visibility = Visibility.Collapsed;
-            mylistbox.Visibility = Visibility.Visible;
+            List<DateTime> filesPubblicationDates = downloadTask.Result.Keys.ToList();
+
         }
     }
 }
