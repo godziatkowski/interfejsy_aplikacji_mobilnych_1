@@ -1,0 +1,43 @@
+﻿<Page
+    x:Class="App1.FileList"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:App1"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <AppBar Grid.Row="0" Grid.Column="0" VerticalAlignment="Stretch">
+            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                <AppBarButton x:Name="ShowValues" HorizontalAlignment="Left" Label="Back to currencies" Click="ShowValues_Click"  Width="200"/>
+                <AppBarButton x:Name="CloseButton" Icon="Clear" HorizontalAlignment="Right" Label="Exit"  Click="CloseButton_Click" VerticalAlignment="Bottom"/>
+            </Grid>
+
+        </AppBar>
+        <Grid HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock x:Name="textBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Choose year" Grid.Column="0" TextAlignment="Center" Margin="0,6,0,0"/>
+            <ComboBox x:Name="yearComboBox" HorizontalAlignment="Stretch" Grid.Column="1" Grid.ColumnSpan="2" SelectionChanged="yearComboBox_SelectionChanged">
+                <ComboBoxItem >2014</ComboBoxItem>
+                <ComboBoxItem >2015</ComboBoxItem>
+                <ComboBoxItem IsSelected="True" >2016</ComboBoxItem>
+            </ComboBox>
+        </Grid>
+        <ProgressRing Grid.Row="2" Grid.Column="0" Name="LoadingRing"></ProgressRing>
+        <ListView x:Name="listView" Grid.Row="2"/>
+    </Grid>
+</Page>
