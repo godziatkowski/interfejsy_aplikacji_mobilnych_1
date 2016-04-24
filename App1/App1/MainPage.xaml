@@ -9,14 +9,22 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
-        <ProgressRing Grid.Row="0" Grid.Column="0" Name="LoadingRing"></ProgressRing>
-        <ListBox Grid.Row="0" Grid.Column="0" x:Name="mylistbox">
+        <AppBar Grid.Row="0" Grid.Column="0" VerticalAlignment="Stretch">
+            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                <AppBarButton x:Name="ShowOtherFiles" Icon="List" HorizontalAlignment="Left" Label="Information from other days"  Click="ShowOtherFilesButton_Click" Width="200"/>
+                <AppBarButton x:Name="CloseButton" Icon="Clear" HorizontalAlignment="Right" Label="Exit"  Click="CloseButton_Click"/>
+            </Grid>
+
+        </AppBar>
+        <ProgressRing Grid.Row="1" Grid.Column="0" Name="LoadingRing"></ProgressRing>
+        <ListBox Grid.Row="1" Grid.Column="0" x:Name="mylistbox">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid Height="52" Width="auto">
@@ -26,6 +34,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Button Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" Click="Button_Click" >Refresh data</Button>
+
+        <Button Grid.Row="2" Grid.Column="0" HorizontalAlignment="Stretch" Click="Button_Click" >Refresh data</Button>
     </Grid>
 </Page>

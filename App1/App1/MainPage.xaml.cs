@@ -77,5 +77,24 @@ namespace App1
             List<DateTime> filesPubblicationDates = downloadTask.Result.Keys.ToList();
 
         }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (downloadTask != null && cts != null && !downloadTask.IsCompleted)
+            {
+                cts.Cancel();
+            }
+            Application.Current.Exit();
+        }
+
+        private void ShowOtherFilesButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (downloadTask != null && cts != null && !downloadTask.IsCompleted)
+            {
+                cts.Cancel();
+            }
+            this.Frame.Navigate(typeof(FileList));
+
+        }
     }
 }
