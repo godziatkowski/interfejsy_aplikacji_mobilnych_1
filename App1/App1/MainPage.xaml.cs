@@ -34,8 +34,27 @@ namespace App1
         public MainPage()
         {
             this.InitializeComponent();
-            loadData();
-            //loadFileNamesFromCurrentYear();
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            String param = e.Parameter as string;
+            if (param != null && param != "")
+            {
+                if (downloadTask != null && cts != null && !downloadTask.IsCompleted)
+                {
+                    cts.Cancel();
+                }
+                loadData(param);
+            }
+            else {
+                if (downloadTask != null && cts != null && !downloadTask.IsCompleted)
+                {
+                    cts.Cancel();
+                }
+                loadData();
+            }
         }
 
 
@@ -69,13 +88,30 @@ namespace App1
                 downloadTask = null;
             }
         }
-
-        private async void loadFileNamesFromCurrentYear()
+        private async void loadData(String fileName)
         {
-            Task<Dictionary<DateTime, String>> downloadTask = new TxtDirDownload().downloadLatestDirFile();
-            await downloadTask;
-            List<DateTime> filesPubblicationDates = downloadTask.Result.Keys.ToList();
-
+            cts = new CancellationTokenSource();
+            try
+            {
+                mylistbox.Visibility = Visibility.Collapsed;
+                LoadingRing.Visibility = Visibility.Visible;
+                LoadingRing.IsActive = true;
+                downloadTask = new CurrencyXMLDownload().downloadFileWIthName(fileName, cts.Token);
+                await downloadTask;
+                currencyList = new ObservableCollection<Currency>(downloadTask.Result);
+                mylistbox.ItemsSource = currencyList;
+            }
+            catch (OperationCanceledException ex)
+            {
+            }
+            finally
+            {
+                LoadingRing.IsActive = false;
+                LoadingRing.Visibility = Visibility.Collapsed;
+                mylistbox.Visibility = Visibility.Visible;
+                cts = null;
+                downloadTask = null;
+            }
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)

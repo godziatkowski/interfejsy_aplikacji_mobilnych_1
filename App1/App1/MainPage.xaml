@@ -18,8 +18,12 @@
         </Grid.ColumnDefinitions>
         <AppBar Grid.Row="0" Grid.Column="0" VerticalAlignment="Stretch">
             <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top">
-                <AppBarButton x:Name="ShowOtherFiles" Icon="List" HorizontalAlignment="Left" Label="Information from other days"  Click="ShowOtherFilesButton_Click" Width="200"/>
-                <AppBarButton x:Name="CloseButton" Icon="Clear" HorizontalAlignment="Right" Label="Exit"  Click="CloseButton_Click"/>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"></ColumnDefinition>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <AppBarButton x:Name="ShowOtherFiles" Icon="List" HorizontalAlignment="Center" Label="Information from other days"  Click="ShowOtherFilesButton_Click" Grid.Column="0" Width="Auto" VerticalAlignment="Stretch"/>
+                <AppBarButton x:Name="CloseButton" Icon="Clear" HorizontalAlignment="Center" Label="Exit"  Click="CloseButton_Click" Grid.Column="1"/>
             </Grid>
 
         </AppBar>
@@ -28,8 +32,8 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid Height="52" Width="auto">
-                        <TextBlock x:Name="nameblock" Text="{Binding currencyName}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Height="41" Width="331" FontSize="30" Margin="10,0,0,0" />
-                        <TextBlock x:Name="marksblock" Text="{Binding currencyAsPLN}" HorizontalAlignment="Left" Margin="391,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="41" Width="55" FontSize="30" />
+                        <TextBlock x:Name="nameblock" Text="{Binding currencyName}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Height="41" Width="400" FontSize="30" Margin="10,0,0,0" />
+                        <TextBlock x:Name="marksblock" Text="{Binding currencyAsPLN}" HorizontalAlignment="Center" Margin="391,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="41" Width="55" FontSize="30" />
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
