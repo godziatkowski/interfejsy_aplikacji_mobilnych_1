@@ -37,7 +37,7 @@ namespace App1.Web
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             token.ThrowIfCancellationRequested();
-            byte[] bytes = await httpClient.GetByteArrayAsync(baseUrl + fileName);
+            byte[] bytes = await httpClient.GetByteArrayAsync(baseUrl + fileName.Trim() + ".xml");
             token.ThrowIfCancellationRequested();
             String fileContent = Encoding.GetEncoding("iso-8859-2").GetString(bytes, 0, bytes.Length);
             token.ThrowIfCancellationRequested();
