@@ -1,8 +1,12 @@
-﻿using System;
+﻿using App1.Web;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -22,9 +26,15 @@ namespace App1
     /// </summary>
     public sealed partial class FileList : Page
     {
+        ObservableCollection<String> publicationDates { get; set; }
+        private Task<Dictionary<String, String>> downloadTask;
+        private Dictionary<String, String> filesWithPublicationDate;
+        private CancellationTokenSource cts;
+
         public FileList()
         {
             this.InitializeComponent();
+            loadFiles();
         }
 
         private void ShowValues_Click(object sender, RoutedEventArgs e)
@@ -38,12 +48,58 @@ namespace App1
 
         private void yearComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            loadFiles();
+            if (fileListBox != null && fileListLoadingRing != null)
+            {
+                loadFiles();
+            };
         }
 
-        private async void loadFiles() {
-            var year = yearComboBox.SelectedValue;
-            System.Diagnostics.Debug.WriteLine(year);
+        private async void loadFiles()
+        {
+            cts = new CancellationTokenSource();
+
+            try
+            {
+                String year = ((ComboBoxItem)yearComboBox.SelectedItem).Name.Substring(1);
+                fileListBox.Visibility = Visibility.Collapsed;
+                fileListLoadingRing.Visibility = Visibility.Visible;
+                fileListLoadingRing.IsActive = true;
+                if (Int16.Parse(year).Equals(2016))
+                {
+                    downloadTask = new TxtDirDownload().downloadLatestDirFile(cts.Token);
+                }
+                else {
+                    downloadTask = new TxtDirDownload().downloadDirFileWithName(year, cts.Token);
+                }
+                await downloadTask;
+
+                filesWithPublicationDate = downloadTask.Result;
+                List<String> publishDates = new List<String>(filesWithPublicationDate.Keys);
+                publicationDates = new ObservableCollection<string>(publishDates);
+                fileListBox.ItemsSource = publicationDates;
+
+            }
+            catch (OperationCanceledException ex)
+            {
+
+            }
+            finally
+            {
+                fileListLoadingRing.IsActive = false;
+                fileListLoadingRing.Visibility = Visibility.Collapsed;
+                fileListBox.Visibility = Visibility.Visible;
+                cts = null;
+                downloadTask = null;
+            }
+        }
+
+        private void fileListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            String keyInDictionary = fileListBox.SelectedItem.ToString();            
+            String fileName = filesWithPublicationDate[keyInDictionary];
+
+            this.Frame.Navigate(typeof(MainPage), fileName);
+
         }
     }
 }

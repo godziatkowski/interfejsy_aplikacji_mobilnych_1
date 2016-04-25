@@ -18,8 +18,12 @@
         </Grid.ColumnDefinitions>
         <AppBar Grid.Row="0" Grid.Column="0" VerticalAlignment="Stretch">
             <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top">
-                <AppBarButton x:Name="ShowValues" HorizontalAlignment="Left" Label="Back to currencies" Click="ShowValues_Click"  Width="200"/>
-                <AppBarButton x:Name="CloseButton" Icon="Clear" HorizontalAlignment="Right" Label="Exit"  Click="CloseButton_Click" VerticalAlignment="Bottom"/>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"></ColumnDefinition>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <AppBarButton x:Name="ShowValues" Icon="Back" HorizontalAlignment="Center" Label="Back to currencies" Grid.Column="0" Click="ShowValues_Click" Width="Auto" VerticalAlignment="Stretch"     />
+                <AppBarButton x:Name="CloseButton" Icon="Clear" HorizontalAlignment="Center" Label="Exit" Grid.Column="1" Click="CloseButton_Click" VerticalAlignment="Stretch"/>
             </Grid>
 
         </AppBar>
@@ -32,12 +36,13 @@
 
             <TextBlock x:Name="textBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Choose year" Grid.Column="0" TextAlignment="Center" Margin="0,6,0,0"/>
             <ComboBox x:Name="yearComboBox" HorizontalAlignment="Stretch" Grid.Column="1" Grid.ColumnSpan="2" SelectionChanged="yearComboBox_SelectionChanged">
-                <ComboBoxItem >2014</ComboBoxItem>
-                <ComboBoxItem >2015</ComboBoxItem>
-                <ComboBoxItem IsSelected="True" >2016</ComboBoxItem>
+                <ComboBoxItem Name="y2014">2014</ComboBoxItem>
+                <ComboBoxItem Name="y2015">2015</ComboBoxItem>
+                <ComboBoxItem Name="y2016" IsSelected="True" >2016</ComboBoxItem>
             </ComboBox>
         </Grid>
-        <ProgressRing Grid.Row="2" Grid.Column="0" Name="LoadingRing"></ProgressRing>
-        <ListView x:Name="listView" Grid.Row="2"/>
+        <ProgressRing Grid.Row="2" Grid.Column="0" Name="fileListLoadingRing"></ProgressRing>
+        <ListBox Grid.Row="2" x:Name="fileListBox" HorizontalContentAlignment="Center" SelectionChanged="fileListBox_SelectionChanged">
+        </ListBox>
     </Grid>
 </Page>
