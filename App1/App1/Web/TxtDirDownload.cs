@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace App1.Web
@@ -11,43 +12,42 @@ namespace App1.Web
     {
         private static readonly string baseUrl = "http://www.nbp.pl/kursy/xml/";
         private static readonly string latestDirFile = "dir.txt";
-        private static readonly string defaultDateFormat = "dd-mm-yyyy";
 
-        public async Task<Dictionary<DateTime, String>> downloadLatestDirFile()
+        public async Task<Dictionary<string, String>> downloadLatestDirFile(CancellationToken token)
         {
 
             HttpClient httpClient = new HttpClient();
             String fileContent = await httpClient.GetStringAsync(baseUrl + latestDirFile);
-            return convertFileContentToDictionaryWithFileNamesWithTheirPublicationDates(fileContent);
+            token.ThrowIfCancellationRequested();
+
+            return convertFileContentToDictionaryWithFileNamesWithTheirPublicationDates(fileContent, token);
         }
 
-        public async Task<Dictionary<DateTime, string>> downloadDirFileWithName(String fileName)
+        public async Task<Dictionary<string, string>> downloadDirFileWithName(String fileName, CancellationToken token)
         {
 
             HttpClient httpClient = new HttpClient();
-            String fileContent = await httpClient.GetStringAsync(baseUrl + fileName);
-
-            return convertFileContentToDictionaryWithFileNamesWithTheirPublicationDates(fileContent);
+            String fileContent = await httpClient.GetStringAsync(baseUrl + "dir" + fileName + ".txt");
+            token.ThrowIfCancellationRequested();
+            return convertFileContentToDictionaryWithFileNamesWithTheirPublicationDates(fileContent, token);
         }
 
-        private Dictionary<DateTime, string> convertFileContentToDictionaryWithFileNamesWithTheirPublicationDates(String fileContent)
+        private Dictionary<string, string> convertFileContentToDictionaryWithFileNamesWithTheirPublicationDates(String fileContent, CancellationToken token)
         {
             List<String> resultList = new List<String>(fileContent.Replace("\n", " ").Split(' '));
+            token.ThrowIfCancellationRequested();
             resultList = resultList.Where(listItem => listItem.StartsWith("a")).ToList();
 
-            Dictionary<DateTime, string> fileNamesWithPublicationDate = new Dictionary<DateTime, string>();
+            Dictionary<string, string> fileNamesWithPublicationDate = new Dictionary<string, string>();
+            token.ThrowIfCancellationRequested();
             foreach (var item in resultList)
             {
                 string dateInfo = "20" + item.Split('z')[1];
                 dateInfo = dateInfo.Substring(6, 2) + '-' + dateInfo.Substring(4, 2) + '-' + dateInfo.Substring(0, 4);
-                try
-                {
-                    DateTime publicationDate = DateTime.ParseExact(dateInfo, defaultDateFormat, System.Globalization.CultureInfo.InvariantCulture);
-                    fileNamesWithPublicationDate.Add(publicationDate, item);
-                }
-                catch (FormatException) {
-                    System.Diagnostics.Debug.Write("Cannot parse " + dateInfo);
-                }
+                String publicationDate = dateInfo;
+                fileNamesWithPublicationDate.Add(publicationDate, item);
+                
+                token.ThrowIfCancellationRequested();
             }
             return fileNamesWithPublicationDate;
         }
