@@ -24,7 +24,7 @@ namespace App1.Web
 
             token.ThrowIfCancellationRequested();
             byte[] bytes = await httpClient.GetByteArrayAsync(baseUrl + lastXML);
-            token.ThrowIfCancellationRequested();            
+            token.ThrowIfCancellationRequested();
             String fileContent = Encoding.GetEncoding("iso-8859-2").GetString(bytes, 0, bytes.Length);
             token.ThrowIfCancellationRequested();
             return convertFileContentToListOfCurrency(fileContent, token);
@@ -53,9 +53,9 @@ namespace App1.Web
             var result = from elem in xdoc.Descendants("pozycja")
                          select new Currency
                          {
-                             currencyName = (String)elem.Element("nazwa_waluty"),
+                             currencyName = (String)elem.Element("nazwa_waluty") ?? (String)elem.Element("nazwa_kraju"),
                              conversionRate = Int16.Parse((String)elem.Element("przelicznik")),
-                             currencyAsPLN = Double.Parse((String)elem.Element("kurs_sredni")),
+                             currencyAsPLN = Double.Parse(((String)elem.Element("kurs_sredni")).Replace(',', '.')),
                              currencyCode = (String)elem.Element("kod_waluty")
                          };
             //foreach( var record in result){
