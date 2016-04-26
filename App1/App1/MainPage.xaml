@@ -10,6 +10,7 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
@@ -27,18 +28,23 @@
             </Grid>
 
         </AppBar>
-        <ProgressRing Grid.Row="1" Grid.Column="0" Name="LoadingRing"></ProgressRing>
-        <ListBox Grid.Row="1" Grid.Column="0" x:Name="mylistbox">
+        <TextBlock x:Name="internetConnectionStatus" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" TextAlignment="Justify" TextWrapping="Wrap">Device is not connected to Interent. All displayed data are loaded from device memory</TextBlock>
+        <ProgressRing Grid.Row="2" Grid.Column="0" Name="LoadingRing" MinWidth="75" MinHeight="75"></ProgressRing>
+        <ListBox Grid.Row="2" Grid.Column="0" x:Name="mylistbox">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid Height="52" Width="auto">
-                        <TextBlock x:Name="nameblock" Text="{Binding currencyName}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Height="41" Width="400" FontSize="30" Margin="10,0,0,0" />
-                        <TextBlock x:Name="marksblock" Text="{Binding currencyAsPLN}" HorizontalAlignment="Center" Margin="391,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="41" Width="55" FontSize="30" />
+                    <Grid Height="52" HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition MinWidth="600"></ColumnDefinition>
+                            <ColumnDefinition MinWidth="60"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock x:Name="nameblock" Text="{Binding currencyName}" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="30" Height="41" Grid.Column="0"/>
+                        <TextBlock x:Name="marksblock" Text="{Binding currencyAsPLN}" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="30" Height="41" Grid.Column="1"/>
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <Button Grid.Row="2" Grid.Column="0" HorizontalAlignment="Stretch" Click="Button_Click" >Refresh data</Button>
+        <Button Grid.Row="3" Grid.Column="0" HorizontalAlignment="Stretch" Click="Button_Click" >Refresh data</Button>
     </Grid>
 </Page>

@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Networking.Connectivity;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -37,6 +38,13 @@ namespace App1
             loadFiles();
         }
 
+        private bool hasInternetConnection()
+        {
+            var connectionProfile = NetworkInformation.GetInternetConnectionProfile();
+            return (connectionProfile != null &&
+                    connectionProfile.GetNetworkConnectivityLevel() == NetworkConnectivityLevel.InternetAccess);
+        }
+
         private void ShowValues_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(MainPage));
@@ -56,40 +64,49 @@ namespace App1
 
         private async void loadFiles()
         {
-            cts = new CancellationTokenSource();
-
-            try
+            
+            if (hasInternetConnection())
             {
-                String year = ((ComboBoxItem)yearComboBox.SelectedItem).Name.Substring(1);
-                fileListBox.Visibility = Visibility.Collapsed;
-                fileListLoadingRing.Visibility = Visibility.Visible;
-                fileListLoadingRing.IsActive = true;
-                if (Int16.Parse(year).Equals(2016))
+                internetConnectionStatus.Visibility = Visibility.Collapsed;
+                cts = new CancellationTokenSource();
+                try
                 {
-                    downloadTask = new TxtDirDownload().downloadLatestDirFile(cts.Token);
+                    String year = ((ComboBoxItem)yearComboBox.SelectedItem).Name.Substring(1);
+                    fileListBox.Visibility = Visibility.Collapsed;
+                    fileListLoadingRing.Visibility = Visibility.Visible;
+                    fileListLoadingRing.IsActive = true;
+                    if (Int16.Parse(year).Equals(2016))
+                    {
+                        downloadTask = new TxtDirDownload().downloadLatestDirFile(cts.Token);
+                    }
+                    else {
+                        downloadTask = new TxtDirDownload().downloadDirFileWithName(year, cts.Token);
+                    }
+                    await downloadTask;
+                    
+
+                    filesWithPublicationDate = downloadTask.Result;
+                    List<String> publishDates = new List<String>(filesWithPublicationDate.Keys);
+                    publicationDates = new ObservableCollection<string>(publishDates);
+                    fileListBox.ItemsSource = publicationDates;
+
                 }
-                else {
-                    downloadTask = new TxtDirDownload().downloadDirFileWithName(year, cts.Token);
+                catch (OperationCanceledException ex)
+                {
+
                 }
-                await downloadTask;
-
-                filesWithPublicationDate = downloadTask.Result;
-                List<String> publishDates = new List<String>(filesWithPublicationDate.Keys);
-                publicationDates = new ObservableCollection<string>(publishDates);
-                fileListBox.ItemsSource = publicationDates;
-
+                finally
+                {
+                    fileListLoadingRing.IsActive = false;
+                    fileListLoadingRing.Visibility = Visibility.Collapsed;
+                    fileListBox.Visibility = Visibility.Visible;
+                    cts = null;
+                    downloadTask = null;
+                }
             }
-            catch (OperationCanceledException ex)
+            else
             {
-
-            }
-            finally
-            {
-                fileListLoadingRing.IsActive = false;
-                fileListLoadingRing.Visibility = Visibility.Collapsed;
-                fileListBox.Visibility = Visibility.Visible;
-                cts = null;
-                downloadTask = null;
+                internetConnectionStatus.Visibility = Visibility.Visible;
             }
         }
 

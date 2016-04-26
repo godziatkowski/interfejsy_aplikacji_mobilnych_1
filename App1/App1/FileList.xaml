@@ -11,6 +11,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -27,7 +28,8 @@
             </Grid>
 
         </AppBar>
-        <Grid HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="0">
+        <TextBlock x:Name="internetConnectionStatus" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" TextAlignment="Justify" TextWrapping="Wrap">Device is not connected to Interent. All displayed data are loaded from device memory</TextBlock>
+        <Grid HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"></ColumnDefinition>
                 <ColumnDefinition Width="2*"></ColumnDefinition>
@@ -36,13 +38,24 @@
 
             <TextBlock x:Name="textBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Choose year" Grid.Column="0" TextAlignment="Center" Margin="0,6,0,0"/>
             <ComboBox x:Name="yearComboBox" HorizontalAlignment="Stretch" Grid.Column="1" Grid.ColumnSpan="2" SelectionChanged="yearComboBox_SelectionChanged">
+                <ComboBoxItem Name="y2002">2002</ComboBoxItem>
+                <ComboBoxItem Name="y2003">2003</ComboBoxItem>
+                <ComboBoxItem Name="y2004">2004</ComboBoxItem>
+                <ComboBoxItem Name="y2005">2005</ComboBoxItem>
+                <ComboBoxItem Name="y2006">2006</ComboBoxItem>
+                <ComboBoxItem Name="y2007">2007</ComboBoxItem>
+                <ComboBoxItem Name="y2008">2008</ComboBoxItem>
+                <ComboBoxItem Name="y2009">2009</ComboBoxItem>
+                <ComboBoxItem Name="y2010">2010</ComboBoxItem>
+                <ComboBoxItem Name="y2011">2011</ComboBoxItem>
+                <ComboBoxItem Name="y2012">2012</ComboBoxItem>
+                <ComboBoxItem Name="y2013">2013</ComboBoxItem>
                 <ComboBoxItem Name="y2014">2014</ComboBoxItem>
                 <ComboBoxItem Name="y2015">2015</ComboBoxItem>
                 <ComboBoxItem Name="y2016" IsSelected="True" >2016</ComboBoxItem>
             </ComboBox>
         </Grid>
-        <ProgressRing Grid.Row="2" Grid.Column="0" Name="fileListLoadingRing"></ProgressRing>
-        <ListBox Grid.Row="2" x:Name="fileListBox" HorizontalContentAlignment="Center" SelectionChanged="fileListBox_SelectionChanged">
-        </ListBox>
+        <ProgressRing Grid.Row="3" Grid.Column="0" Name="fileListLoadingRing" MinWidth="75" MinHeight="75"></ProgressRing>
+        <ListBox Grid.Row="3" x:Name="fileListBox" HorizontalContentAlignment="Center" SelectionChanged="fileListBox_SelectionChanged" FontWeight="Bold" FontStretch="SemiExpanded"/>
     </Grid>
 </Page>
