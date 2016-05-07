@@ -113,7 +113,7 @@ namespace App1
         private void fileListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             String keyInDictionary = fileListBox.SelectedItem.ToString();            
-            String fileName = filesWithPublicationDate[keyInDictionary];
+            String fileName = filesWithPublicationDate[keyInDictionary].Trim();
 
             this.Frame.Navigate(typeof(MainPage), fileName);
 

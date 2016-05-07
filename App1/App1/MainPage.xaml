@@ -28,7 +28,9 @@
             </Grid>
 
         </AppBar>
-        <TextBlock x:Name="internetConnectionStatus" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" TextAlignment="Justify" TextWrapping="Wrap">Device is not connected to Interent. All displayed data are loaded from device memory</TextBlock>
+        <TextBlock x:Name="internetConnectionStatus" Grid.Row="1" Grid.Column="0" Margin="20 5" HorizontalAlignment="Center" TextAlignment="Justify" TextWrapping="Wrap">
+            No Internet Connection Available
+        </TextBlock>
         <ProgressRing Grid.Row="2" Grid.Column="0" Name="LoadingRing" MinWidth="75" MinHeight="75"></ProgressRing>
         <ListBox Grid.Row="2" Grid.Column="0" x:Name="mylistbox">
             <ListBox.ItemTemplate>
@@ -44,6 +46,10 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <TextBlock x:Name="noDataToDisplay" Grid.Row="2" Grid.Column="0" Margin="20"
+                   VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Justify" TextWrapping="Wrap">            
+            Currency data from choosen date&#x0a;is not saved in device memory
+        </TextBlock>
 
         <Button Grid.Row="3" Grid.Column="0" HorizontalAlignment="Stretch" Click="Button_Click" >Refresh data</Button>
     </Grid>

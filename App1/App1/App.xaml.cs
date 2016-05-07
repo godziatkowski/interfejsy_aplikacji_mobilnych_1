@@ -43,6 +43,7 @@ namespace App1
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
 
+            DataObjects.DownloadedFileList.readListFromFile();
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
             {
@@ -79,6 +80,7 @@ namespace App1
             }
             // Ensure the current window is active
             Window.Current.Activate();
+
         }
 
         /// <summary>

@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Threading;
 using Windows.Networking.Connectivity;
+using App1.LocalStorageUtils;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -68,6 +69,7 @@ namespace App1
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            //DownloadedFileList.clearMe();
             loadData();
         }
 
@@ -76,8 +78,8 @@ namespace App1
             nameOfDisplayedFile = "currentData";
             if (hasInternetConnection())
             {
-
                 internetConnectionStatus.Visibility = Visibility.Collapsed;
+                noDataToDisplay.Visibility = Visibility.Collapsed;
                 cts = new CancellationTokenSource();
                 try
                 {
@@ -103,15 +105,81 @@ namespace App1
             }
             else {
                 internetConnectionStatus.Visibility = Visibility.Visible;
+                this.nameOfDisplayedFile = "currentData";                
+                cts = new CancellationTokenSource();
+                try
+                {
+                    mylistbox.Visibility = Visibility.Collapsed;
+                    LoadingRing.Visibility = Visibility.Visible;
+                    LoadingRing.IsActive = true;
+                    downloadTask = new CurrencyFromFileLoader().loadLatestCurrencyFile(cts.Token);
+                    await downloadTask;
+                    currencyList = new ObservableCollection<Currency>(downloadTask.Result);
+                    mylistbox.ItemsSource = currencyList;
+                }
+                catch (OperationCanceledException ex)
+                {
+                }
+                finally
+                {
+                    LoadingRing.IsActive = false;
+                    LoadingRing.Visibility = Visibility.Collapsed;
+                    if (currencyList.Count > 0)
+                    {
+                        mylistbox.Visibility = Visibility.Visible;
+                    }
+                    else {
+                        noDataToDisplay.Visibility = Visibility.Visible;
+                    }
+                    cts = null;
+                    downloadTask = null;
+                }
             }
         }
         private async void loadData(String fileName)
         {
-            this.nameOfDisplayedFile = fileName;
-            if (hasInternetConnection())
+            if (DownloadedFileList.isFileNameAlreadyDownloaded(fileName + ".xml"))
             {
-
+                System.Diagnostics.Debug.WriteLine("Found file");
+                this.nameOfDisplayedFile = fileName;
                 internetConnectionStatus.Visibility = Visibility.Collapsed;
+                noDataToDisplay.Visibility = Visibility.Collapsed;
+                cts = new CancellationTokenSource();
+                try
+                {
+                    mylistbox.Visibility = Visibility.Collapsed;
+                    LoadingRing.Visibility = Visibility.Visible;
+                    LoadingRing.IsActive = true;
+                    downloadTask = new CurrencyFromFileLoader().loadCurrencyFromFile(fileName, cts.Token);
+                    await downloadTask;
+                    currencyList = new ObservableCollection<Currency>(downloadTask.Result);
+                    mylistbox.ItemsSource = currencyList;
+                }
+                catch (OperationCanceledException ex)
+                {
+                }
+                finally
+                {
+                    LoadingRing.IsActive = false;
+                    LoadingRing.Visibility = Visibility.Collapsed;
+                    if (currencyList.Count > 0)
+                    {
+                        mylistbox.Visibility = Visibility.Visible;
+                    }
+                    else {
+                        noDataToDisplay.Visibility = Visibility.Visible;
+                    }
+                    cts = null;
+                    downloadTask = null;
+                }
+
+            }
+            else if (hasInternetConnection())
+            {
+                System.Diagnostics.Debug.WriteLine("File not found but can be loaded");
+                this.nameOfDisplayedFile = fileName;
+                internetConnectionStatus.Visibility = Visibility.Collapsed;
+                noDataToDisplay.Visibility = Visibility.Collapsed;
                 cts = new CancellationTokenSource();
                 try
                 {
@@ -136,7 +204,9 @@ namespace App1
                 }
             }
             else {
+                System.Diagnostics.Debug.WriteLine("no internet and file not found");
                 internetConnectionStatus.Visibility = Visibility.Visible;
+                noDataToDisplay.Visibility = Visibility.Visible;
             }
         }
 

@@ -95,16 +95,18 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="LocalStorageUtils\DownloadedFileList.cs" />
     <Compile Include="FileList.xaml.cs">
       <DependentUpon>FileList.xaml</DependentUpon>
     </Compile>
     <Compile Include="DataObjects\Currency.cs" />
+    <Compile Include="LocalStorageUtils\CurrencyFromFileLoader.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Web\TxtDirDownload.cs" />
-    <Compile Include="Web\CurrencyXMLDownload.cs" />
+    <Compile Include="WebUtils\TxtDirDownload.cs" />
+    <Compile Include="WebUtils\CurrencyXMLDownload.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

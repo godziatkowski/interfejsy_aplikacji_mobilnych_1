@@ -9,6 +9,8 @@ using App1.DataObjects;
 using System.IO;
 using Windows.Data.Xml.Dom;
 using System.Threading;
+using System.Xml;
+using Windows.Storage;
 
 namespace App1.Web
 {
@@ -27,7 +29,7 @@ namespace App1.Web
             token.ThrowIfCancellationRequested();
             String fileContent = Encoding.GetEncoding("iso-8859-2").GetString(bytes, 0, bytes.Length);
             token.ThrowIfCancellationRequested();
-            return convertFileContentToListOfCurrency(fileContent, token);
+            return convertFileContentToListOfCurrency(fileContent, lastXML, token);
 
         }
 
@@ -41,15 +43,14 @@ namespace App1.Web
             token.ThrowIfCancellationRequested();
             String fileContent = Encoding.GetEncoding("iso-8859-2").GetString(bytes, 0, bytes.Length);
             token.ThrowIfCancellationRequested();
-            return convertFileContentToListOfCurrency(fileContent, token);
+            return convertFileContentToListOfCurrency(fileContent, fileName.Trim() + ".xml", token);
         }
 
-        private List<Currency> convertFileContentToListOfCurrency(String fileContent, CancellationToken token)
+        private List<Currency> convertFileContentToListOfCurrency(String fileContent, String fileName, CancellationToken token)
         {
             XDocument xdoc = new XDocument();
 
             xdoc = XDocument.Parse(fileContent);
-
             var result = from elem in xdoc.Descendants("pozycja")
                          select new Currency
                          {
@@ -64,7 +65,28 @@ namespace App1.Web
             //}
             //System.Diagnostics.Debug.WriteLine(result.ToList().Count);
             token.ThrowIfCancellationRequested();
+            storeFile(fileName, fileContent);
             return result.ToList();
+        }
+
+        private async void storeFile(string fileName, String fileContent)
+        {
+
+            StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
+            System.Diagnostics.Debug.WriteLine(storageFolder.DisplayName);
+            StorageFile file = await storageFolder.CreateFileAsync( fileName, CreationCollisionOption.ReplaceExisting);
+            await FileIO.WriteTextAsync(file, fileContent);
+
+            DownloadedFileList.newFileDownloaded(fileName);
+
+            storageFolder = ApplicationData.Current.LocalFolder;
+                        
+            StorageFile readedFile = await storageFolder.GetFileAsync(fileName);
+
+            string readeedFileContent = await FileIO.ReadTextAsync(readedFile);
+
+
+
         }
 
 
