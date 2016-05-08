@@ -1,0 +1,68 @@
+﻿<Page
+    x:Class="App1.Views.CurrencyDetails"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:App1.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"   
+    xmlns:Charting="using:WinRTXamlToolkit.Controls.DataVisualization.Charting"
+    mc:Ignorable="d">
+
+    <Grid Background="Azure">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition ></RowDefinition>
+            <!--<RowDefinition Height="Auto"></RowDefinition>-->
+        </Grid.RowDefinitions>
+        <Grid Background="LightBlue" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                    <ColumnDefinition Width="5*"></ColumnDefinition>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Image Grid.Column="0" Source="ms-appx:///Assets/icon.png" Width="Auto" Height="50"></Image>
+                <Button Background="LightBlue" Grid.Column="1" x:Name="BackToCurrencyPage" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="Back to currency page"  Click="BackToCurrencyPageButton_Click" />
+                <Button Background="LightBlue" Grid.Column="2" x:Name="CloseButton" Content="Exit" Click="CloseButton_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            </Grid>
+            <TextBlock Grid.Row="1" Margin="0 10" x:Name="CurrencyName" TextAlignment="Center" FontSize="20.333"></TextBlock>
+        </Grid>
+        <Grid Grid.Row="1" HorizontalAlignment="Stretch" x:Name="Filters">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="4*"></ColumnDefinition>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="4*"></ColumnDefinition>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Column="0" Grid.Row="0" TextAlignment="Center" VerticalAlignment="Center">From</TextBlock>
+            <CalendarDatePicker x:Name="DateFromFilter" DateFormat="{}{day.integer} {month.full} {year.full}" Grid.Column="1" Grid.Row="0" Background="LightCyan"  HorizontalAlignment="Stretch" CalendarViewStyle="{StaticResource CalendarViewStyle1}"></CalendarDatePicker>
+            <TextBlock Grid.Column="2" Grid.Row="0" TextAlignment="Center" VerticalAlignment="Center">To</TextBlock>
+            <CalendarDatePicker x:Name="DateToFilter" DateFormat="{}{day.integer} {month.full} {year.full}" Grid.Column="3" Grid.Row="0" Background="LightCyan" HorizontalAlignment="Stretch" CalendarViewStyle="{StaticResource CalendarViewStyle1}"/>
+            <Button x:Name="LoadButton" Background="LightCyan" Grid.Column="4" Grid.Row="0" Content="Load" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Click="LoadButton_Click"/>
+        </Grid>
+        <TextBlock x:Name="IncorrectDateFiltersInfo" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextAlignment="Center" TextWrapping="WrapWholeWords" Visibility="Collapsed"> "From" Date filter cannot be set to later date than "To" Date Filter</TextBlock>
+
+        <ProgressRing Grid.Row="3" Grid.Column="0" Name="LoadingRing" MinWidth="75" MinHeight="75"></ProgressRing>
+
+        <Charting:Chart x:Name="lineChart" Grid.Row="3" Grid.Column="0" Visibility="Collapsed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+            <Charting:Chart.LegendStyle>
+                <Style TargetType="FrameworkElement">
+                    <Setter Property="Width" Value="0" />
+                </Style>
+            </Charting:Chart.LegendStyle>
+            <Charting:LineSeries Margin="0" IndependentValuePath="Label" DependentValuePath="Amount"/>
+        </Charting:Chart>
+
+        <!--<Button Background="LightBlue" Grid.Row="4" Grid.Column="0" x:Name="Save" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="Save"  Click="SaveButton_Click" Visibility="Collapsed"/>-->
+    </Grid>
+</Page>

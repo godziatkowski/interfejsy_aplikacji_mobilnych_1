@@ -21,7 +21,7 @@ namespace App1.DataObjects
 
         public static void newFileDownloaded(String fileName)
         {
-            if (fileName != null && fileName != "")
+            if (fileName != null && fileName.Trim() != "")
             {
                 downloadedFileNames.Add(fileName);
 
@@ -34,28 +34,20 @@ namespace App1.DataObjects
             return downloadedFileNames.Contains(fileName);
         }
 
-        public static List<String> getFileNamesFromSpcifiedMonthInYear(string month, string year)
+        public static List<String> getFileNamesPublishedBetweenDates(DateTime from, DateTime to)
         {
             List<String> foundFileNames = new List<string>();
-            string desiredDate = year.Substring(2, 2) + month;
             foreach (string filename in downloadedFileNames)
             {
-                if (filename.Split('z')[1].StartsWith(desiredDate))
+                string[] splittedFileName = filename.Split('z');
+                if (splittedFileName.Length == 1)
                 {
-                    foundFileNames.Add(filename);
+                    continue;
                 }
-            }
 
-            return foundFileNames;
-        }
-
-        public static List<String> getFileNamesFromSpecificYear(String year)
-        {
-            List<String> foundFileNames = new List<string>();
-            string desiredDate = year.Substring(2, 2);
-            foreach (string filename in downloadedFileNames)
-            {
-                if (filename.Split('z')[1].StartsWith(desiredDate))
+                string datePart = splittedFileName[1];
+                DateTime filePublicationDate = new DateTime(Int16.Parse(datePart.Substring(0, 2)), Int16.Parse(datePart.Substring(2, 2)), Int16.Parse(datePart.Substring(4, 2)));
+                if (from.Ticks < filePublicationDate.Ticks && filePublicationDate.Ticks < to.Ticks)
                 {
                     foundFileNames.Add(filename);
                 }
@@ -75,9 +67,9 @@ namespace App1.DataObjects
             StorageFile file = await storageFolder.CreateFileAsync(FILE_NAME, CreationCollisionOption.ReplaceExisting);
             await FileIO.WriteTextAsync(file, sb.ToString());
 
-            System.Diagnostics.Debug.WriteLine(sb.ToString());
+            //System.Diagnostics.Debug.WriteLine(sb.ToString());
 
-            System.Diagnostics.Debug.WriteLine(downloadedFileNames.Count);
+            //System.Diagnostics.Debug.WriteLine(downloadedFileNames.Count);
         }
 
         public static async void readListFromFile()
