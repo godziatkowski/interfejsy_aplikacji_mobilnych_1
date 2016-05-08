@@ -73,19 +73,10 @@ namespace App1.Web
         {
 
             StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
-            System.Diagnostics.Debug.WriteLine(storageFolder.DisplayName);
             StorageFile file = await storageFolder.CreateFileAsync( fileName, CreationCollisionOption.ReplaceExisting);
             await FileIO.WriteTextAsync(file, fileContent);
 
             DownloadedFileList.newFileDownloaded(fileName);
-
-            storageFolder = ApplicationData.Current.LocalFolder;
-                        
-            StorageFile readedFile = await storageFolder.GetFileAsync(fileName);
-
-            string readeedFileContent = await FileIO.ReadTextAsync(readedFile);
-
-
 
         }
 

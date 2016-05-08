@@ -19,6 +19,7 @@ using System.Collections.ObjectModel;
 using System.Threading;
 using Windows.Networking.Connectivity;
 using App1.LocalStorageUtils;
+using App1.Views;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -43,12 +44,14 @@ namespace App1
         {
             base.OnNavigatedTo(e);
             String param = e.Parameter as string;
-            if (param != null && param != "")
+            if (param != null && param != "" && param != "currentData")
             {
                 if (downloadTask != null && cts != null && !downloadTask.IsCompleted)
                 {
                     cts.Cancel();
                 }
+                string stringDate = "20" + param.Split('z')[1];
+                DisplayedPublicationDate.Text = stringDate.Substring(4, 2) + "." + stringDate.Substring(6, 2) + "." + stringDate.Substring(0, 4);
                 loadData(param);
             }
             else {
@@ -56,6 +59,7 @@ namespace App1
                 {
                     cts.Cancel();
                 }
+                DisplayedPublicationDate.Text = DateTime.Today.ToString("dd/MM/yyyy").Replace("/", ".");
                 loadData();
             }
         }
@@ -70,6 +74,7 @@ namespace App1
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             //DownloadedFileList.clearMe();
+            DisplayedPublicationDate.Text = DateTime.Today.ToString("dd/MM/yyyy").Replace("/", ".");
             loadData();
         }
 
@@ -105,7 +110,7 @@ namespace App1
             }
             else {
                 internetConnectionStatus.Visibility = Visibility.Visible;
-                this.nameOfDisplayedFile = "currentData";                
+                this.nameOfDisplayedFile = "currentData";
                 cts = new CancellationTokenSource();
                 try
                 {
@@ -140,7 +145,6 @@ namespace App1
         {
             if (DownloadedFileList.isFileNameAlreadyDownloaded(fileName + ".xml"))
             {
-                System.Diagnostics.Debug.WriteLine("Found file");
                 this.nameOfDisplayedFile = fileName;
                 internetConnectionStatus.Visibility = Visibility.Collapsed;
                 noDataToDisplay.Visibility = Visibility.Collapsed;
@@ -176,7 +180,6 @@ namespace App1
             }
             else if (hasInternetConnection())
             {
-                System.Diagnostics.Debug.WriteLine("File not found but can be loaded");
                 this.nameOfDisplayedFile = fileName;
                 internetConnectionStatus.Visibility = Visibility.Collapsed;
                 noDataToDisplay.Visibility = Visibility.Collapsed;
@@ -204,7 +207,6 @@ namespace App1
                 }
             }
             else {
-                System.Diagnostics.Debug.WriteLine("no internet and file not found");
                 internetConnectionStatus.Visibility = Visibility.Visible;
                 noDataToDisplay.Visibility = Visibility.Visible;
             }
@@ -225,7 +227,18 @@ namespace App1
             {
                 cts.Cancel();
             }
-            this.Frame.Navigate(typeof(FileList));
+            this.Frame.Navigate(typeof(FileList), nameOfDisplayedFile);
+        }
+
+        private void mylistbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (downloadTask != null && cts != null && !downloadTask.IsCompleted)
+            {
+                cts.Cancel();
+            }
+            Currency currency = (Currency)mylistbox.SelectedItem;
+            currency.fileNameWhichContainsThisCurrency = nameOfDisplayedFile;
+            this.Frame.Navigate(typeof(CurrencyDetails), currency);
         }
 
 

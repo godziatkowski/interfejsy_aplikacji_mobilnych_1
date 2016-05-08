@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="Azure">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
@@ -17,22 +17,28 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
-        <AppBar Grid.Row="0" Grid.Column="0" VerticalAlignment="Stretch">
-            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top">
+        <Grid Background="LightBlue" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3*"></ColumnDefinition>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                    <ColumnDefinition Width="5*"></ColumnDefinition>
                     <ColumnDefinition Width="1*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <AppBarButton x:Name="ShowOtherFiles" Icon="List" HorizontalAlignment="Center" Label="Information from other days"  Click="ShowOtherFilesButton_Click" Grid.Column="0" Width="Auto" VerticalAlignment="Stretch"/>
-                <AppBarButton x:Name="CloseButton" Icon="Clear" HorizontalAlignment="Center" Label="Exit"  Click="CloseButton_Click" Grid.Column="1"/>
+                <Image Grid.Column="0" Source="ms-appx:///Assets/icon.png" Width="Auto" Height="50"></Image>
+                <Button Background="LightBlue" Grid.Column="1" x:Name="ShowOtherFiles" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="Information from other days"  Click="ShowOtherFilesButton_Click" />
+                <Button Background="LightBlue" Grid.Column="2" x:Name="CloseButton" Content="Exit" Click="CloseButton_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
             </Grid>
-
-        </AppBar>
+            <TextBlock Grid.Row="1" Margin="0 10" x:Name="DisplayedPublicationDate" TextAlignment="Center" FontSize="20.333"></TextBlock>
+        </Grid>
         <TextBlock x:Name="internetConnectionStatus" Grid.Row="1" Grid.Column="0" Margin="20 5" HorizontalAlignment="Center" TextAlignment="Justify" TextWrapping="Wrap">
             No Internet Connection Available
         </TextBlock>
         <ProgressRing Grid.Row="2" Grid.Column="0" Name="LoadingRing" MinWidth="75" MinHeight="75"></ProgressRing>
-        <ListBox Grid.Row="2" Grid.Column="0" x:Name="mylistbox">
+        <ListBox Grid.Row="2" Grid.Column="0" x:Name="mylistbox" Background="Azure" SelectionChanged="mylistbox_SelectionChanged">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid Height="52" HorizontalAlignment="Stretch">
@@ -46,11 +52,11 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <TextBlock x:Name="noDataToDisplay" Grid.Row="2" Grid.Column="0" Margin="20"
-                   VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Justify" TextWrapping="Wrap">            
-            Currency data from choosen date&#x0a;is not saved in device memory
+        <TextBlock x:Name="noDataToDisplay" Grid.Row="2" Grid.Column="0" Margin="20" 
+                   VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap">            
+            Currency data for choosen date <LineBreak/> is not saved in device memory
         </TextBlock>
 
-        <Button Grid.Row="3" Grid.Column="0" HorizontalAlignment="Stretch" Click="Button_Click" >Refresh data</Button>
+        <Button Background="LightBlue" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Stretch" Click="Button_Click" >Load latest currency data</Button>
     </Grid>
 </Page>

@@ -31,11 +31,17 @@ namespace App1
         private Task<Dictionary<String, String>> downloadTask;
         private Dictionary<String, String> filesWithPublicationDate;
         private CancellationTokenSource cts;
+        private string callbackFile;
 
         public FileList()
         {
             this.InitializeComponent();
             loadFiles();
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            callbackFile = (String)e.Parameter;
         }
 
         private bool hasInternetConnection()
@@ -47,7 +53,7 @@ namespace App1
 
         private void ShowValues_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(MainPage));
+            this.Frame.Navigate(typeof(MainPage), callbackFile);
         }
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
@@ -64,7 +70,7 @@ namespace App1
 
         private async void loadFiles()
         {
-            
+
             if (hasInternetConnection())
             {
                 internetConnectionStatus.Visibility = Visibility.Collapsed;
@@ -83,7 +89,7 @@ namespace App1
                         downloadTask = new TxtDirDownload().downloadDirFileWithName(year, cts.Token);
                     }
                     await downloadTask;
-                    
+
 
                     filesWithPublicationDate = downloadTask.Result;
                     List<String> publishDates = new List<String>(filesWithPublicationDate.Keys);
@@ -112,7 +118,7 @@ namespace App1
 
         private void fileListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            String keyInDictionary = fileListBox.SelectedItem.ToString();            
+            String keyInDictionary = fileListBox.SelectedItem.ToString();
             String fileName = filesWithPublicationDate[keyInDictionary].Trim();
 
             this.Frame.Navigate(typeof(MainPage), fileName);
