@@ -104,6 +104,8 @@ namespace App1.Views
                 int fromYear = DateFromFilter.Date.Value.Year;
                 int toYear = DateToFilter.Date.Value.Year;
                 IncorrectDateFiltersInfo.Visibility = Visibility.Collapsed;
+                LoadingBar.Visibility = Visibility.Visible;
+                LoadingBar.Value = 0;
                 lineChart.Visibility = Visibility.Collapsed;
                 Filters.Visibility = Visibility.Collapsed;
                 //Save.Visibility = Visibility.Collapsed;
@@ -158,6 +160,10 @@ namespace App1.Views
                         downloadTask = null;
                     }
                 }
+                int countOfFilesToLoad = namesOfFilesToLoadWithPublicationDates.Count;
+                int loadedFiles = 0;
+                LoadingBar.Maximum = countOfFilesToLoad;
+                LoadingBar.Value = loadedFiles;
 
                 List<String> alreadyDownloadedFileNames = DownloadedFileList.getFileNamesPublishedBetweenDates(DateFromFilter.Date.Value.DateTime, DateToFilter.Date.Value.DateTime);
                 currencyData = new Dictionary<DateTime, Double>();
@@ -205,6 +211,8 @@ namespace App1.Views
                             currencyLoadingTask = null;
                         }
                     }
+                    loadedFiles++;
+                    LoadingBar.Value = loadedFiles;
                 }
 
                 drawLineChart();
@@ -213,6 +221,7 @@ namespace App1.Views
                 LoadingRing.Visibility = Visibility.Collapsed;
                 LoadingRing.IsActive = false;
                 lineChart.Visibility = Visibility.Visible;
+                LoadingBar.Visibility = Visibility.Collapsed;
                 //Save.Visibility = Visibility.Visible;
             }
             else {

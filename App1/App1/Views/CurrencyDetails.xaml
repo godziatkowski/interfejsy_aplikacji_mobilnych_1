@@ -13,10 +13,12 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition ></RowDefinition>
             <!--<RowDefinition Height="Auto"></RowDefinition>-->
         </Grid.RowDefinitions>
-        <Grid Background="LightBlue" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch">
+        <ProgressBar x:Name="LoadingBar" Grid.Row="0" HorizontalAlignment="Stretch" Visibility="Collapsed" Height="25"></ProgressBar>
+        <Grid Background="LightBlue" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch">
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
@@ -33,7 +35,7 @@
             </Grid>
             <TextBlock Grid.Row="1" Margin="0 10" x:Name="CurrencyName" TextAlignment="Center" FontSize="20.333"></TextBlock>
         </Grid>
-        <Grid Grid.Row="1" HorizontalAlignment="Stretch" x:Name="Filters">
+        <Grid Grid.Row="2" HorizontalAlignment="Stretch" x:Name="Filters">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"></ColumnDefinition>
                 <ColumnDefinition Width="4*"></ColumnDefinition>
@@ -50,11 +52,11 @@
             <CalendarDatePicker x:Name="DateToFilter" DateFormat="{}{day.integer} {month.full} {year.full}" Grid.Column="3" Grid.Row="0" Background="LightCyan" HorizontalAlignment="Stretch" CalendarViewStyle="{StaticResource CalendarViewStyle1}"/>
             <Button x:Name="LoadButton" Background="LightCyan" Grid.Column="4" Grid.Row="0" Content="Load" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Click="LoadButton_Click"/>
         </Grid>
-        <TextBlock x:Name="IncorrectDateFiltersInfo" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextAlignment="Center" TextWrapping="WrapWholeWords" Visibility="Collapsed"> "From" Date filter cannot be set to later date than "To" Date Filter</TextBlock>
+        <TextBlock x:Name="IncorrectDateFiltersInfo" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextAlignment="Center" TextWrapping="WrapWholeWords" Visibility="Collapsed"> "From" Date filter cannot be set to later date than "To" Date Filter</TextBlock>
 
-        <ProgressRing Grid.Row="3" Grid.Column="0" Name="LoadingRing" MinWidth="75" MinHeight="75"></ProgressRing>
+        <ProgressRing Grid.Row="4" Grid.Column="0" Name="LoadingRing" MinWidth="75" MinHeight="75"></ProgressRing>
 
-        <Charting:Chart x:Name="lineChart" Grid.Row="3" Grid.Column="0" Visibility="Collapsed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+        <Charting:Chart x:Name="lineChart" Grid.Row="4" Grid.Column="0" Visibility="Collapsed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
             <Charting:Chart.LegendStyle>
                 <Style TargetType="FrameworkElement">
                     <Setter Property="Width" Value="0" />
