@@ -22,8 +22,6 @@ namespace App1.LocalStorageUtils
             {
                 StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
                 token.ThrowIfCancellationRequested();
-                System.Diagnostics.Debug.WriteLine(storageFolder.DisplayName);
-                System.Diagnostics.Debug.WriteLine(fileName + ".xml");
                 StorageFile file = await storageFolder.GetFileAsync(fileName+ ".xml");
 
                 token.ThrowIfCancellationRequested();
