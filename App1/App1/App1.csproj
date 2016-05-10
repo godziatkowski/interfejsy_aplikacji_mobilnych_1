@@ -97,6 +97,7 @@
     </Compile>
     <Compile Include="DataObjects\ChartPoint.cs" />
     <Compile Include="DataObjects\DownloadedFileList.cs" />
+    <Compile Include="LocalStorageUtils\PageSettingsUtil.cs" />
     <Compile Include="Views\CurrencyDetails.xaml.cs">
       <DependentUpon>CurrencyDetails.xaml</DependentUpon>
     </Compile>

@@ -1,4 +1,5 @@
-﻿using App1.Web;
+﻿using App1.LocalStorageUtils;
+using App1.Web;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -41,6 +42,7 @@ namespace App1
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            new PageSettingsUtil().setCurrentPage("fileList");
             callbackFile = (String)e.Parameter;
         }
 

@@ -1,4 +1,5 @@
-﻿ using System;
+﻿using App1.LocalStorageUtils;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -76,7 +77,19 @@ namespace App1
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                string lastPage = new PageSettingsUtil().getCurrentPage();
+                switch (lastPage)
+                {
+                    case "mainPage":
+                        rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                        break;
+                    case "fileList":
+                        rootFrame.Navigate(typeof(FileList), e.Arguments);
+                        break;
+                    default:
+                        rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                        break;
+                }
             }
             // Ensure the current window is active
             Window.Current.Activate();

@@ -43,6 +43,7 @@ namespace App1
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
+            new PageSettingsUtil().setCurrentPage("mainPage");
             String param = e.Parameter as string;
             if (param != null && param != "" && param != "currentData")
             {
@@ -51,7 +52,7 @@ namespace App1
                     cts.Cancel();
                 }
                 string stringDate = "20" + param.Split('z')[1];
-                DisplayedPublicationDate.Text = stringDate.Substring(4, 2) + "." + stringDate.Substring(6, 2) + "." + stringDate.Substring(0, 4);
+                DisplayedPublicationDate.Text = stringDate.Substring(6, 2) + "." + stringDate.Substring(4, 2) + "." + stringDate.Substring(0, 4);
                 loadData(param);
             }
             else {
