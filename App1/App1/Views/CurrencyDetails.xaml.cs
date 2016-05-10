@@ -53,7 +53,7 @@ namespace App1.Views
             fromDateFilter = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
             toDateFilter = DateTime.Today;
             minDate = new DateTime(2002, 01, 02);
-            maxDate = new DateTime(DateTime.Today.Year, DateTime.Today.AddMonths(1).Month, 1).AddDays(-1);
+            maxDate = DateTime.Today;
             DateFromFilter.Date = fromDateFilter;
             DateFromFilter.MinDate = minDate;
             DateFromFilter.MaxDate = maxDate;
